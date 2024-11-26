@@ -8,7 +8,6 @@ from web.components.modulereloader import ModuleReloader
 reloader = ModuleReloader()
 
 
-
 def create_menu():
 
     # Group pages by folder

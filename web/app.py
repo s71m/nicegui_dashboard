@@ -18,7 +18,7 @@ app.add_static_files('/static', 'web/static')
 def dynamic_page(folder: str, module: str):
     """
     Dynamic page that loads and instantiates a class based on URL parameters.
-    Example URL: /admin/dashboard or /reports/sales
+    Example URL: /examples/example or /cards/cards_polars
     """
 
 
