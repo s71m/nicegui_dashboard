@@ -1,4 +1,8 @@
 
+This is an example of how fast and elegantly you can create dashboards with nicegui. I tried streamlit, dash, panel and now nicegui. https://nicegui.io/ is fast, intuitive and supports many plugins.
+The purpose of this repository is to be a friendly start for those who can start working with nicegui, for this case I created web/examples/example_page.py. 
+And if you want to add a new page, you can create a new folder in web/pages/, for example new_folder, create a new_page.py file with a NewPage class, and it will automatically appear in the header after you click the reload button of the project modules.
+
 Project Structure:  `nicegui_dashboard`
 
 ----------
@@ -46,7 +50,7 @@ web/pages/tools/
 web/static/
 
 -   Static files for styling and interactivity.
-    -   `drawer.js`: JavaScript for managing ui.left_drawer (sidebar) behavior.
+    -   `drawer.js`: JavaScript for changing width of ui.left_drawer (sidebar).
     -   `header.css`: CSS for styling the application's header.
     -   `styles.css`: Global styles for the dashboard.
     
