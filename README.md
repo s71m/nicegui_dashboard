@@ -1,23 +1,14 @@
 
 This is an example of how fast and elegantly you can create dashboards with nicegui. I tried streamlit, dash, panel and now nicegui. https://nicegui.io/ is fast, intuitive and supports many plugins.
 The purpose of this repository is to be a friendly start for those who can start working with nicegui, for this case I created web/examples/example_page.py. 
+
 And if you want to add a new page, you can create a new folder in web/pages/, for example new_folder, create a new_page.py file with a NewPage class, and it will automatically appear in the header after you click the reload button of the project modules.
+[example_page.py](web%2Fpages%2Fexamples%2Fexample_page.py)
 
-Project Structure:  `nicegui_dashboard`
-
-----------
-
-utils/
-
--   Utility modules for reusable functionality.
-    -   common/
-        -   `decorators.py`: Defines reusable decorators for wrapping or enhancing functions or classes.
-        -   `registry.py`: Handles a registry for tracking components or modules dynamically.
+Short explanation of project structure:  `nicegui_dashboard`
 
 ----------
-
 web/
-
 -   Core application logic, templates, and configurations.
     -   `app.py`: Main entry point for the application.
     -   `header.py`: Defines the UI layout or functionality for the application's header.
@@ -25,7 +16,6 @@ web/
     -   `pagetemplate.py`: Base template for creating pages with a common structure.
 
 web/components/
-
 -   Reusable components for building pages.
     -   `modulereloader.py`: Handles reloading of modules for dynamic updates during development without restarting server.
     -   `pageconf.py`: Manages page configuration in YAML configuration file.
@@ -33,17 +23,15 @@ web/components/
     -   `pagemanager.py`: Create page structure {folder}/{module}, handles page routing.
 
 web/pages/cards
-
 -   `cards_page.py`: Implements a page displaying cards (e.g., grid or list).
 -   `cards_polars_page.py`: Similar to  `cards_page.py`  with additional Polars-based functionality.
 
 web/pages/examples
-
 -   `example_page.py`: Demonstrates how to create a new page using PageTemplate.
 
 web/pages/tools/
 
--   `project_modules_page.py`: A tool-focused page for managing or visualizing project modules.
+-   `project_modules_page.py`: A page visualizing current running project modules, which will be reloaded.
 
 ----------
 
