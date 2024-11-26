@@ -1,7 +1,7 @@
 
 This repository demonstrates how quickly and elegantly you can create dashboards with **NiceGUI**. After trying Streamlit, Dash, Panel, and now NiceGUI, I've found that [NiceGUI](https://nicegui.io/) is fast, intuitive, and supports many plugins.
 
-The purpose of this repository is to provide a friendly starting point for developers who want to work with NiceGUI. For this purpose, I created `web/examples/example_page.py` as an example page.
+The purpose of this repository is to provide a friendly starting point for developers who want to work with NiceGUI. For this purpose, I created [example_page.py](web%2Fpages%2Fexamples%2Fexample_page.py) as an example page.
 
 If you'd like to add a new page, you can:
 
@@ -35,8 +35,8 @@ If you'd like to add a new page, you can:
 
 #### **web/pages/cards/**
 
--   **`cards_page.py`**: Implements a page displaying cards (e.g., grid or list).
--   **`cards_polars_page.py`**: Similar to `cards_page.py` but with additional functionality using the Polars library.
+-   **`cards_page.py`**: Implements a page displaying grid of cards.
+-   **`cards_polars_page.py`**: Similar to `cards_page.py` but with using Polars.
 
 ----------
 
@@ -63,7 +63,7 @@ If you'd like to add a new page, you can:
 
 ### Get Started
 
--   Explore `web/pages/examples/example_page.py` to see how a page is built.
+-   Explore [example_page.py](web%2Fpages%2Fexamples%2Fexample_page.py) to see how a page is built.
 -   Create your own page under `web/pages/` and watch it appear automatically in the application!
 
 https://github.com/user-attachments/assets/c466f497-b046-457b-906b-b98d78024a7d
