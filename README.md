@@ -65,5 +65,6 @@ If you'd like to add a new page, you can:
 
 -   Explore `web/pages/examples/example_page.py` to see how a page is built.
 -   Create your own page under `web/pages/` and watch it appear automatically in the application!
+
 https://github.com/user-attachments/assets/c466f497-b046-457b-906b-b98d78024a7d
 
