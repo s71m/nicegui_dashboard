@@ -1,15 +1,20 @@
 
 This repository demonstrates how quickly and elegantly you can create dashboards with **NiceGUI**. After trying Streamlit, Dash, Panel, and now NiceGUI, I've found that [NiceGUI](https://nicegui.io/) is fast, intuitive, and supports many plugins.
 
-The purpose of this repository is to provide a friendly starting point for developers who want to work with NiceGUI. For this purpose, I created [example_page.py](web%2Fpages%2Fexamples%2Fexample_page.py) as an example page.
-
-If you'd like to add a new page, you can:
-
-1.  Create a new folder under `web/pages/` (e.g., `new_folder`).
-2.  Add a `new_page.py` file with a `NewPage` class.
-3.  The new page will automatically appear in the header after you click the "Reload" button in the Project Modules section.
+The purpose of this repository is to provide a friendly starting point for developers who want to work with NiceGUI.
 
 ----------
+
+## Get Started
+
+-   Explore [example_page.py](web%2Fpages%2Fexamples%2Fexample_page.py) to see how a page is built.
+-   Create a new folder under `web/pages/` (e.g., `new_folder`).
+-   Add a `new_page.py` file with a `NewPage` class.
+-   Click the "Reload" button and watch it appear automatically in the application!.
+
+----------
+
+
 
 ### Short Explanation of Project Structure: `nicegui_dashboard`
 
@@ -59,12 +64,9 @@ If you'd like to add a new page, you can:
     -   **`header.css`**: CSS for styling the application's header.
     -   **`styles.css`**: Global styles for the dashboard.
 
-----------
 
-### Get Started
 
--   Explore [example_page.py](web%2Fpages%2Fexamples%2Fexample_page.py) to see how a page is built.
--   Create your own page under `web/pages/` and watch it appear automatically in the application!
+
 
 https://github.com/user-attachments/assets/c466f497-b046-457b-906b-b98d78024a7d
 
