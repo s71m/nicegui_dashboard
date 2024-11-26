@@ -1,0 +1,4 @@
+nicegui~=2.7.0
+loguru~=0.7.2
+polars~=1.15.0
+omegaconf~=2.3.0
