@@ -1,0 +1,10 @@
+default:
+  sidebar_width: 350
+  sidebar_cards_grid_height: 500
+  cards_per_row: 3
+  card_height: 450
+/cards/cards_polars:
+  sidebar_width: 650
+  sidebar_cards_grid_height: 500
+  cards_per_row: 3
+  card_height: 350
