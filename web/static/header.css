@@ -1,0 +1,77 @@
+.nicegui-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    height: 80px;
+    border-bottom: 1px solid #FFFFFF0C;
+    background: #010409; /* You can adjust the color as needed */
+
+}
+
+.menu-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    /*background-color: #010409;*/
+}
+
+.dropdown-container {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-button {
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: #94a3b8;  /* slate-400 for better visibility in dark mode */
+    font-size: 1rem;
+}
+
+.dropdown-button:hover {
+    color: #e2e8f0;  /* slate-200 */
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #010409;  /* slate-800 */
+    min-width: 200px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+    border-radius: 6px;
+    border: 1px solid #334155;  /* slate-700 */
+    z-index: 1000;
+}
+
+.dropdown-container:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown-link {
+    display: block;
+    padding: 0.75rem 1rem;
+    color: #94a3b8;  /* slate-400 */
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.dropdown-link:hover {
+    background-color: #334155;  /* slate-700 */
+    color: #e2e8f0;  /* slate-200 */
+}
+
+.menu-link {
+    padding: 0.5rem 1rem;
+    color: #94a3b8;
+    text-decoration: none;
+}
+
+.menu-link:hover {
+    color: #e2e8f0;  /* slate-200 */
+}
+
