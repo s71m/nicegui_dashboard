@@ -51,9 +51,8 @@ class PageTemplate(ABC):
 
     def check_sidebar(self) -> bool:
         """Check if sidebar is implemented by checking MRO"""
-        # Get method from current class
-        sidebar_method = getattr(self.__class__, 'sidebar', None)
 
+        sidebar_method = getattr(self.__class__, 'sidebar', None)
         # Check if method exists and is not from PageTemplate base class
         return sidebar_method is not None and sidebar_method.__qualname__.split('.')[0] != 'PageTemplate'
 
@@ -63,9 +62,7 @@ class PageTemplate(ABC):
             with ui.row().classes('items-center'):
                 ui.label(self.pageinfo.route).classes('text-white text-xl font-bold').style('width: 350px;')
                 if self.has_sidebar:
-                    ui.button(icon='menu', on_click=lambda: self.left_drawer.toggle()) \
-                        .props('flat color=white')
-
+                    ui.button(icon='menu', on_click=lambda: self.left_drawer.toggle()).props('flat color=white')
 
                 ui.button(icon='settings',
                           on_click=lambda: globalpageconf.open_settings_dialog(
@@ -78,11 +75,11 @@ class PageTemplate(ABC):
             # Right side - Module controls
             with ui.row().classes('gap-2'):
                 ui.button(icon='sync', on_click=reload_modules).props(
-                    'flat color=white')  # .props('icon=sync').classes('bg-green-600 hover:bg-green-700 text-white')
+                    'flat color=white')
 
     def _create_sidebar(self) -> None:
         """Creates the sidebar structure with proper container"""
-        width = self.pageconf.get('sidebar_width')  # or any value you want
+        width = self.pageconf.get('sidebar_width')
         with ui.left_drawer().props(f'width={width}') as self.left_drawer:
             self.sidebar()
 

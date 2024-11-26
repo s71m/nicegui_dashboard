@@ -129,7 +129,7 @@ class CardsPage(PageTemplate):
 
     def _remove_card(self, card_name: str):
         """
-        Remove a card from display and optionally update grid selection
+        Remove a card from display and update grid selection
 
         Args:
             card_name: Name of the card to remove

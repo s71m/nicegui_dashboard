@@ -52,7 +52,7 @@ function setupDrawerResize() {
 
 document.addEventListener('DOMContentLoaded', () => {
     const drawer = document.querySelector('.q-drawer');
-    if (!drawer) return; // Exit if no drawer exists
+    if (!drawer) return;
 
     setupDrawerResize();
 

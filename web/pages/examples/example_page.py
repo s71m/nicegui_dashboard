@@ -6,8 +6,8 @@ from web.pagetemplate import PageTemplate
 class ExamplePage(PageTemplate):
     """Example implementation of page"""
 
-    def sidebar(self) -> None:
+    def sidebar(self):
         ui.label("This is the sidebar label").classes("text-primary")
 
-    def main(self) -> None:
+    def main(self):
         ui.label("This is the main label").classes("text-primary")
