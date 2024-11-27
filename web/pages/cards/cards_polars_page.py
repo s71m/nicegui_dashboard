@@ -4,44 +4,14 @@ import polars as pl
 from nicegui import ui
 
 from web.components.pageinfo import PageInfo
+from web.components.ui_aggrid import map_polars_aggrid_schema
 from web.pagetemplate import PageTemplate
 
-
-def get_column_definitions(df: pl.DataFrame, checkbox_field: Optional[str] = None) -> list[dict]:
-    """Generate AG Grid column definitions with basic filters based on Polars types."""
-    column_defs = []
-
-    for col_name in df.columns:
-        dtype = df.schema[col_name]
-        col_def = {
-            'field': col_name,
-            'headerName': col_name.replace('_', ' ').title(),
-            'floatingFilter': True
-        }
-
-        # Add checkbox if specified
-        if checkbox_field and col_name == checkbox_field:
-            col_def['checkboxSelection'] = True
-            col_def['headerCheckboxSelection'] = True
-
-        # Add basic filter based on data type
-        if dtype in (pl.Float32, pl.Float64, pl.Int32, pl.Int64):
-            col_def['filter'] = 'agNumberColumnFilter'
-        elif dtype == pl.Boolean:
-            col_def['filter'] = 'agSetColumnFilter'
-        elif dtype == pl.Date:
-            col_def['filter'] = 'agDateColumnFilter'
-        else:  # Default to text filter for strings and other types
-            col_def['filter'] = 'agTextColumnFilter'
-
-        column_defs.append(col_def)
-
-    return column_defs
 
 
 class CardsPolarsPage(PageTemplate):
     def __init__(self, pageinfo: PageInfo):
-
+        # Initialize data
         self.df = pl.DataFrame({
             'name': pl.Series(['Card ' + str(i) for i in range(1, 15)], dtype=pl.String),
             'description': pl.Series(['Description ' + str(i) for i in range(1, 15)], dtype=pl.String),
@@ -57,27 +27,26 @@ class CardsPolarsPage(PageTemplate):
 
         # UI component references
         self.search_input: Optional[ui.input] = None
-        self.data_grid: Optional[ui.aggrid] = None
-        self.cards_display_grid: Optional[ui.grid] = None
+        self.cards_aggrid: Optional[ui.aggrid] = None
+        self.cards_container: Optional[ui.grid] = None
 
         super().__init__(pageinfo)
 
     def sidebar(self):
         """Create sidebar with search and data grid"""
         with ui.row().classes('w-full'):
-            ui.input(placeholder='Quick search...', on_change=self._handle_quick_search) \
-                .props('dense before-style="border-color: red"') \
+            self.search_input = ui.input(placeholder='Quick search...', on_change=self._handle_quick_search) \
+                .props('dense') \
                 .classes('w-full custom-input')
 
-        # Configure data grid with Polars column definitions
+        # Configure data grid with community edition features
         grid_config = {
             'defaultColDef': {
                 'sortable': True,
                 'filter': True,
-                'resizable': True,
-                'floatingFilter': True
+                'resizable': True
             },
-            'columnDefs': get_column_definitions(self.df, checkbox_field='name'),
+            'columnDefs': map_polars_aggrid_schema(self.df, checkbox_field='name'),
             'rowSelection': 'multiple',
             'rowMultiSelectWithClick': True,
             ':getRowId': '(params) => params.data.name',
@@ -85,27 +54,34 @@ class CardsPolarsPage(PageTemplate):
             'suppressFieldDotNotation': True
         }
 
-        self.data_grid = ui.aggrid(grid_config, theme='balham-dark') \
+        self.cards_aggrid = ui.aggrid(grid_config, theme='balham-dark') \
             .classes('w-full') \
             .style(f'height: {self.pageconf.get("sidebar_cards_grid_height")}px')
 
     def main(self):
         """Initialize main content area with cards grid"""
-        self.cards_display_grid = ui.grid(columns=self.pageconf.get("cards_per_row")).classes('w-full')
+        self.cards_container = ui.grid(columns=self.pageconf.get("cards_per_row")).classes('w-full')
 
     def events(self):
         """Bind all event handlers"""
-        self.data_grid.on('selectionChanged', self._handle_card_selection_change)
+        self.cards_aggrid.on('selectionChanged', self._handle_card_selection_change)
 
     def _handle_quick_search(self, event):
         """Filter grid data based on search input"""
-        search_text = event.value if event.value is not None else ''
-        self.data_grid.options['quickFilterText'] = search_text
-        self.data_grid.update()
+        search_text = event.value.lower() if event.value is not None else ''
+
+        # Manual filtering since quickFilter is an enterprise feature
+        filtered_data = self.df.filter(
+            pl.col('name').str.to_lowercase().str.contains(search_text) |
+            pl.col('description').str.to_lowercase().str.contains(search_text)
+        ).to_dicts()
+
+        self.cards_aggrid.options['rowData'] = filtered_data
+        self.cards_aggrid.update()
 
     async def _handle_card_selection_change(self, _):
         """Update displayed cards based on grid selection"""
-        selected_rows = await self.data_grid.get_selected_rows()
+        selected_rows = await self.cards_aggrid.get_selected_rows()
         newly_selected_names = {row['name'] for row in selected_rows}
 
         # Remove cards that were deselected
@@ -126,7 +102,7 @@ class CardsPolarsPage(PageTemplate):
         if not card_data:
             return
 
-        with self.cards_display_grid:
+        with self.cards_container:
             with ui.card().classes('w-full h-full').style(
                     f'height: {self.pageconf.get("card_height")}px; padding: 0') as card:
                 # Card header
@@ -153,23 +129,17 @@ class CardsPolarsPage(PageTemplate):
 
                 # Card content
                 with ui.column().classes('p-4'):
-                    # Display all fields except name
                     for field, value in card_data.items():
                         if field != 'name':
                             formatted_field = field.replace('_', ' ').title()
-                            ui.label(f"{field}: {value}").classes('mb-1')
+                            ui.label(f"{formatted_field}: {value}").classes('mb-1')
 
             self.card_ui_elements[card_name] = card
 
     def _remove_card(self, card_name: str):
-        """Remove a card from display and optionally update grid selection"""
+        """Remove a card from display and update grid selection"""
         if card_name in self.card_ui_elements:
-            # Remove UI element
             self.card_ui_elements[card_name].delete()
             self.card_ui_elements.pop(card_name)
-
-            # Update selection tracking
             self.selected_card_names.discard(card_name)
-
-            # Update grid selection
-            self.data_grid.run_row_method(card_name, 'setSelected', False)
+            self.cards_aggrid.run_row_method(card_name, 'setSelected', False)
