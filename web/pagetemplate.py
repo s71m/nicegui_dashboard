@@ -1,7 +1,7 @@
 from abc import abstractmethod, ABC
 from typing import Optional
-
 from nicegui import ui
+from nicegui.events import KeyEventArguments
 from loguru import logger
 
 from web.components.pageconf import globalpageconf
@@ -20,16 +20,18 @@ class PageTemplate(ABC):
     def __init__(self, pageinfo: PageInfo):
         self.pageinfo = pageinfo
         self.left_drawer: Optional[ui.left_drawer] = None
+        self.keyboard: Optional[ui.keyboard] = None
 
         self.has_sidebar = self.check_sidebar()
 
         self.pageconf = globalpageconf.load(self.pageinfo.route)
         # Template method that defines the overall page structure
-        self.show()
+        self.render()
 
-    def show(self):
+    def render(self):
         """Template method defining the page creation algorithm"""
         self._add_resources()
+        self._setup_keyboard()
         self.header()
         if self.has_sidebar:
             self._create_sidebar()
@@ -37,7 +39,6 @@ class PageTemplate(ABC):
         self.events()
 
     def _add_resources(self):
-
         ui.add_head_html('''
             <link rel="stylesheet" href="/static/styles.css">
             <link rel="stylesheet" href="/static/header.css">            
@@ -48,11 +49,21 @@ class PageTemplate(ABC):
                 <script src="/static/drawer.js"></script>         
             ''')
 
+    def _setup_keyboard(self):
+        """Setup global keyboard shortcuts"""
+        def handle_key(e: KeyEventArguments):
+            # Handle Ctrl+Q to toggle sidebar
+            if (e.modifiers.ctrl and e.key == 'q' and e.action.keydown and not e.action.repeat and self.left_drawer):
+                self.left_drawer.toggle()
+
+        self.keyboard = ui.keyboard(on_key=handle_key)
+        self.keyboard.active = True
 
     def check_sidebar(self) -> bool:
         """Check if sidebar is implemented by checking MRO"""
-
+        # Get method from current class
         sidebar_method = getattr(self.__class__, 'sidebar', None)
+
         # Check if method exists and is not from PageTemplate base class
         return sidebar_method is not None and sidebar_method.__qualname__.split('.')[0] != 'PageTemplate'
 
@@ -62,7 +73,8 @@ class PageTemplate(ABC):
             with ui.row().classes('items-center'):
                 ui.label(self.pageinfo.route).classes('text-white text-xl font-bold').style('width: 350px;')
                 if self.has_sidebar:
-                    ui.button(icon='menu', on_click=lambda: self.left_drawer.toggle()).props('flat color=white')
+                    ui.button(icon='menu', on_click=lambda: self.left_drawer.toggle()) \
+                        .props('flat color=white')
 
                 ui.button(icon='settings',
                           on_click=lambda: globalpageconf.open_settings_dialog(
@@ -79,7 +91,7 @@ class PageTemplate(ABC):
 
     def _create_sidebar(self) -> None:
         """Creates the sidebar structure with proper container"""
-        width = self.pageconf.get('sidebar_width')
+        width = self.pageconf.get('sidebar_width')  # or any value you want
         with ui.left_drawer().props(f'width={width}') as self.left_drawer:
             self.sidebar()
 

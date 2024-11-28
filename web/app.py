@@ -1,16 +1,12 @@
-import os
-
 from nicegui import ui, app
 import importlib
 
 from web.components.pagemanager import pagemanager
 
-
 from loguru import logger
 
 from web.header import create_menu
 
-print(os.getenv('PYTHONPATH'))
 
 app.add_static_files('/static', 'web/static')
 
@@ -18,7 +14,7 @@ app.add_static_files('/static', 'web/static')
 def dynamic_page(folder: str, module: str):
     """
     Dynamic page that loads and instantiates a class based on URL parameters.
-    Example URL: /examples/example or /cards/cards_polars
+    Example URL: /cards/cards_modul or /tools/project_modules
     """
 
 
@@ -43,6 +39,7 @@ def dynamic_page(folder: str, module: str):
                 ui.label(f"Class {page_info.classname} not found in module").classes('text-red-500')
         except Exception as e:
             logger.error(f"Error instantiating {module}\n {page_info}: \n{str(e)}")
+            # logger.exception(f"Error instantiating {module}\n {page_info}: \n{str(e)}")
             ui.label(f"Error instantiating {module}\n {page_info}: \n{str(e)}").classes('text-red-500')
     else:
         ui.label(f"Page not found: {route}").classes('text-red-500')
@@ -61,4 +58,9 @@ def main_page():
     with ui.card().classes('p-4'):
         ui.label('Welcome')
 
-ui.run(dark=True, reload=False)
+try:
+    ui.run(dark=True, reload=False)
+except KeyboardInterrupt:
+    print("Received keyboard interrupt")
+finally:
+    print("Cleanup complete")

@@ -4,9 +4,10 @@ import polars as pl
 
 from nicegui import ui
 
-from web.components.cards import CardContainer, CardType
+from web.components.cards.cardscontainer import CardContainer
+from web.components.cards.cardtypes import CardType
 from web.components.pageinfo import PageInfo
-from web.pages.cards.cards_polars_page import map_polars_aggrid_schema
+from web.components.ui_aggrid import map_polars_aggrid_schema
 from web.pagetemplate import PageTemplate
 
 
@@ -83,7 +84,6 @@ class CardsModulPage(PageTemplate):
         """Handle card removal triggered by X button click"""
         if card_name in self.selected_card_names:
             await self.ui_cards_aggrid.run_row_method(card_name, 'setSelected', False)
-            #self.selected_card_names.remove(card_name)
 
     async def handle_card_select(self, _):
         """Update displayed cards based on grid selection"""

@@ -33,9 +33,9 @@ class PageManager:
         Returns:
             dict: A dictionary with page routes as keys and PageInfo instances as values in the following format:
             {
-                '/': PageInfo(route='/', modulepath='pages.home_page', classname='HomePage', display='Home PageTemplate'),
-                '/contact': PageInfo(route='/contact', modulepath='pages.contact_page', classname='ContactPage', display='Contact PageTemplate'),
-                '/ex/custom': PageInfo(route='/ex/custom', modulepath='pages.ex.custom_page', classname='CustomPage', display='Custom PageTemplate')
+                '/': PageInfo(route='/', modulepath='web.pages.home_page', classname='HomePage', display='Home PageTemplate'),
+                '/contact': PageInfo(route='/contact', modulepath='web.pages.contact_page', classname='ContactPage', display='Contact PageTemplate'),
+                '/ex/custom': PageInfo(route='/ex/custom', modulepath='web.pages.ex.custom_page', classname='CustomPage', display='Custom PageTemplate')
             }
         """
         pages = {}

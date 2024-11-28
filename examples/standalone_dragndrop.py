@@ -268,7 +268,7 @@ class CardContainer(ui.grid):
         dragged_idx = next(i for i, (name, _) in enumerate(cards) if name == dragged_name)
         target_idx = next(i for i, (name, _) in enumerate(cards) if name == target_name)
 
-        # cards.pop(dragged_idx)
+        cards.pop(dragged_idx)
 
         if position == 'left':
             insert_idx = target_idx if target_idx > dragged_idx else target_idx
