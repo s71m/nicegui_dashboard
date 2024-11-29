@@ -3,6 +3,8 @@ from nicegui import ui, app
 from fastapi import Request
 import importlib
 
+from web_panel.app import PageInfo
+
 from web.components.pagemanager import pagemanager
 
 
@@ -25,20 +27,20 @@ async def dynamic_module_page(request: Request):
     route = f'/{path}'
 
     pages = pagemanager.get_pages()
-    page_info = pages.get(route)
+    pageinfo: PageInfo = pages.get(route)
 
-    if page_info is not None:
+    if pageinfo is not None:
         try:
-            module = importlib.import_module(page_info.modulepath)
-            if hasattr(module, page_info.classname):
-                ModuleClass = getattr(module, page_info.classname)
+            module = importlib.import_module(pageinfo.modulepath)
+            if hasattr(module, pageinfo.classname):
+                ModuleClass = getattr(module, pageinfo.classname)
 
-                ModuleClass(pageinfo=page_info, request=request)
+                ModuleClass(pageinfo=pageinfo, request=request)
             else:
-                ui.label(f"Class {page_info.classname} not found in module").classes('text-red-500')
+                ui.label(f"Class {pageinfo.classname} not found in module").classes('text-red-500')
         except Exception as e:
-            logger.error(f"Error instantiating {module}\n {page_info}: \n{str(e)}")
-            ui.label(f"Error instantiating {module}\n {page_info}: \n{str(e)}").classes('text-red-500')
+            logger.error(f"Error instantiating {module}\n {pageinfo}: \n{str(e)}")
+            ui.label(f"Error instantiating {module}\n {pageinfo}: \n{str(e)}").classes('text-red-500')
     else:
         any_page(route)
 
