@@ -1,5 +1,3 @@
-import os
-
 from nicegui import ui
 
 from web.components.pagemanager import pagemanager
@@ -7,9 +5,7 @@ from web.components.modulereloader import ModuleReloader
 
 reloader = ModuleReloader()
 
-
 def create_menu():
-
     # Group pages by folder
     grouped_pages  = {}
     for route, page_info in pagemanager.get_pages().items():
@@ -21,21 +17,12 @@ def create_menu():
     # Create the menu using HTML for better hover control
     menu_html = '<div class="menu-container">'
 
-    # Add root pages first
-    if 'pages_root' in grouped_pages:
-        for route, page_info in grouped_pages['pages_root']:
-            menu_html += f'''
-                <a href="{page_info.route}" class="menu-link">
-                    {page_info.display}
-                </a>
-            '''
-
     # Add folder dropdowns
     for folder, pages in grouped_pages.items():
         if folder != 'pages_root':
             menu_html += f'''
                 <div class="dropdown-container">
-                    <button class="dropdown-button">{folder.title()}</button>
+                    <button class="dropdown-button">{folder.title()}/</button>
                     <div class="dropdown-content">
             '''
 
@@ -49,6 +36,15 @@ def create_menu():
             menu_html += '''
                     </div>
                 </div>
+            '''
+
+    # Add root pages last
+    if 'pages_root' in grouped_pages:
+        for route, page_info in grouped_pages['pages_root']:
+            menu_html += f'''
+                <button class="dropdown-button"><a href="{page_info.route}" class="menu-link">
+                    {page_info.display}
+                </a></button>
             '''
 
     menu_html += '</div>'

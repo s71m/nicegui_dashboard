@@ -8,3 +8,8 @@ default:
   sidebar_cards_grid_height: 500
   cards_per_row: 3
   card_height: 350
+/cards/cards_modul:
+  sidebar_width: 450
+  sidebar_cards_grid_height: 400
+  cards_per_row: 3
+  card_height: 250

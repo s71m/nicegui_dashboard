@@ -9,15 +9,15 @@ drop_target = None
 
 
 class CardTemplate(ui.card):
-    def __init__(self, name: str, card_dict: dict, cls_card_container) -> None:  # Removed on_close parameter
+    def __init__(self, name: str, card_dict: dict, cls_card_container) -> None:
         super().__init__()
         self.name = name
         self.card_dict = card_dict
         self.cls_card_container = cls_card_container
+
         self.ui_info_label = None
         self.overlay = None
-        self.left_zone = None
-        self.right_zone = None
+        self.zones = {}
 
         self.classes('w-full h-full shadow-lg transition-shadow hover:shadow-xl p-0 relative')
         self.style(f'height: {self.cls_card_container.card_height}px;')
@@ -32,12 +32,10 @@ class CardTemplate(ui.card):
             self.drag_zones()
 
     def header(self):
-        """Creates the card header with drag handle and controls"""
         with ui.row().classes('w-full flex items-center min-h-[2.5rem] bg-[#262b2e] rounded-t'):
             # Draggable name element
             with ui.element('span').props('draggable') \
-                    .classes(
-                'w-16 flex items-center justify-center text-base font-medium text-white cursor-move ml-2') as header:
+                    .classes('w-16 flex items-center justify-center text-base font-medium text-white cursor-move ml-2') as header:
                 ui.html(self.name).classes('select-text truncate')
 
             header.on('dragstart', self.handle_drag_start)
@@ -49,13 +47,13 @@ class CardTemplate(ui.card):
             # Right-aligned info label
             self.ui_info_label = ui.label('').classes('text-white text-sm flex-grow px-1 py-2 text-right')
 
-            # Controls
+            # Fullscreen and close buttons
             with ui.row().classes('flex items-center gap-0.5 mr-1 shrink-0'):
-                ui.icon('fullscreen', size='20px') \
-                    .classes('cursor-pointer text-gray-300 hover:text-white p-0.5') \
+                ui.icon('fullscreen', size='24px') \
+                    .classes('cursor-pointer text-gray-600 hover:text-white') \
                     .on('click', self.handle_fullscreen)
-                ui.icon('close', size='20px') \
-                    .classes('cursor-pointer text-gray-300 hover:text-white p-0.5') \
+                ui.icon('close', size='24px') \
+                    .classes('cursor-pointer text-gray-600 hover:text-white') \
                     .on('click', self.handle_remove)
 
     def content(self):
@@ -64,19 +62,14 @@ class CardTemplate(ui.card):
 
     def drag_zones(self):
         """Add transparent left and right drop zones over the card."""
-        with ui.element('div').classes('absolute left-0 right-0 bottom-0 top-[2.5rem] flex overlay').style(
-                'pointer-events: none;') as self.overlay:
-            with ui.element('div').classes('w-1/2 h-full left-zone').style('pointer-events: none;'):
-                self.left_zone = ui.element('div').classes('w-full h-full')
-                self.left_zone.on('dragover.prevent', self.handle_left_drag_over)
-                self.left_zone.on('dragleave', self.handle_drag_leave)
-                self.left_zone.on('drop', self.handle_drop_left)
-
-            with ui.element('div').classes('w-1/2 h-full right-zone').style('pointer-events: none;'):
-                self.right_zone = ui.element('div').classes('w-full h-full')
-                self.right_zone.on('dragover.prevent', self.handle_right_drag_over)
-                self.right_zone.on('dragleave', self.handle_drag_leave)
-                self.right_zone.on('drop', self.handle_drop_right)
+        with ui.element('div').classes('absolute inset-[0.2rem] flex overlay').style('pointer-events: none;') as self.overlay:
+            for side in ['left', 'right']:
+                with ui.element('div').classes(f'w-1/2 h-full {side}-zone').style('pointer-events: none;'):
+                    zone = ui.element('div').classes('w-full h-full')
+                    self.zones[side] = zone
+                    zone.on('dragover.prevent', lambda e, s=side: self.handle_drag_over(e, s))
+                    zone.on('dragleave', self.handle_drag_leave)
+                    zone.on('drop', lambda e, s=side: self.handle_drop(e, s))
 
     def handle_drag_start(self, e):
         global dragged
@@ -98,39 +91,25 @@ class CardTemplate(ui.card):
             });
         ''')
 
-    def handle_left_drag_over(self, e):
+    def handle_drag_over(self, e, side: str):
         global drop_target
         if self != dragged:
             drop_target = self
-            self.left_zone.classes(add='highlight')
-            self.right_zone.classes(remove='highlight')
-
-    def handle_right_drag_over(self, e):
-        global drop_target
-        if self != dragged:
-            drop_target = self
-            self.right_zone.classes(add='highlight')
-            self.left_zone.classes(remove='highlight')
+            self.zones[side].classes(add='highlight')
+            other_side = 'right' if side == 'left' else 'left'
+            self.zones[other_side].classes(remove='highlight')
 
     def handle_drag_leave(self, e):
         self.remove_highlight()
 
     def remove_highlight(self):
-        self.left_zone.classes(remove='highlight')
-        self.right_zone.classes(remove='highlight')
+        for zone in self.zones.values():
+            zone.classes(remove='highlight')
 
-    def handle_drop_left(self, e):
+    def handle_drop(self, e, side: str):
         global dragged, drop_target
         if dragged and drop_target and dragged != drop_target:
-            self.cls_card_container.reorder_cards(dragged, drop_target, position='left')
-            dragged = None
-            drop_target = None
-        self.remove_highlight()
-
-    def handle_drop_right(self, e):
-        global dragged, drop_target
-        if dragged and drop_target and dragged != drop_target:
-            self.cls_card_container.reorder_cards(dragged, drop_target, position='right')
+            self.cls_card_container.reorder_cards(dragged, drop_target, position=side)
             dragged = None
             drop_target = None
         self.remove_highlight()
@@ -145,13 +124,14 @@ class CardTemplate(ui.card):
             }}
         ''')
 
-    def handle_remove(self):  # Changed to sync, removed async
-        self.cls_card_container.remove_card(self.name)  # Direct removal
+    def handle_remove(self):
+        self.cls_card_container.remove_card(self.name)
 
 
 class ChartCard(CardTemplate):
     def content(self):
         """Implements chart content with random series data"""
+        # print(self.card_dict)
         with ui.card_section().classes('p-2 w-full h-full'):
             options = {
                 'tooltip': {},
@@ -205,13 +185,13 @@ class CardType(Enum):
 class CardContainer(ui.grid):
     def __init__(self, columns: int = 3,
                  card_type: Union[CardType, dict] = CardType.CHART,
-                 card_height: int = 300,
-                 on_remove: Optional[Callable[[str], None]] = None):
+                 card_height: int = 300
+                 ):
         super().__init__(columns=columns)
         self.ui_cards = {}
         self.card_type = card_type.value
         self.card_height = card_height
-        self.on_remove = on_remove
+
         self.classes('w-full')
         ui.add_head_html('''
         <style>
@@ -280,10 +260,10 @@ class CardContainer(ui.grid):
 
 @ui.page("/")
 def main():
-    # Add some example cards
+
     container = CardContainer(columns=3, card_height=400)
 
-    # Add sample cards with random data
+    # Add sample cards
     for i in range(6):
         card_name = f'Chart {i + 1}'
         card_data = {'data': f'Sample data for {card_name}'}

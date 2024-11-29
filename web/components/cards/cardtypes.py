@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 from web.components.cards.commoncard import CommonCard, ChartCard
 
 

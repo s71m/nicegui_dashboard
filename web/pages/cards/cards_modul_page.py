@@ -4,15 +4,15 @@ import polars as pl
 
 from nicegui import ui
 
+from web.pagetemplate import PageTemplate
+from web.components.aggrid_polars import AgGridPolars
 from web.components.cards.cardscontainer import CardContainer
 from web.components.cards.cardtypes import CardType
-from web.components.pageinfo import PageInfo
-from web.components.ui_aggrid import map_polars_aggrid_schema
-from web.pagetemplate import PageTemplate
+
 
 
 class CardsModulPage(PageTemplate):
-    def __init__(self, pageinfo: PageInfo):
+    def __init__(self, **kwargs):
         # Initialize data
         self.df = pl.DataFrame({
             'name': pl.Series(['Card ' + str(i) for i in range(1, 15)], dtype=pl.String),
@@ -21,15 +21,9 @@ class CardsModulPage(PageTemplate):
             'active': pl.Series([i % 2 == 0 for i in range(1, 15)], dtype=pl.Boolean),
             'created_date': pl.Series([date(2024, 1, i) for i in range(1, 15)], dtype=pl.Date)
         })
-
-        # Track selected cards
-        self.selected_card_names: Set[str] = set()
-
-        # UI component references
-        self.ui_cards_aggrid: Optional[ui.aggrid] = None
-        self.ui_card_container: Optional[CardContainer] = None
-
-        super().__init__(pageinfo)
+        self.cls_card_container: Optional[CardContainer] = None
+        self.cls_aggrid_polars: Optional[AgGridPolars] = None
+        super().__init__(**kwargs)
 
     def sidebar(self):
         """Create sidebar with search and data grid"""
@@ -37,28 +31,17 @@ class CardsModulPage(PageTemplate):
             ui.input(placeholder='Quick search by name...', on_change=self.handle_search) \
                 .props('dense clearable').classes('w-full')
 
-        # Configure data grid with community edition features
-        grid_config = {
-            'defaultColDef': {
-                'sortable': True,
-                'filter': True,
-                'resizable': True
-            },
-            'columnDefs': map_polars_aggrid_schema(self.df, checkbox_field='name'),
-            'rowSelection': 'multiple',
-            'rowMultiSelectWithClick': True,
-            ':getRowId': '(params) => params.data.name',
-            'rowData': self.df.to_dicts(),
-            'suppressFieldDotNotation': True
-        }
-
-        self.ui_cards_aggrid = ui.aggrid(grid_config, theme='balham-dark').classes('w-full') \
-            .style(f'height: {self.pageconf.get("sidebar_cards_grid_height")}px')
-        self.ui_cards_aggrid.on('selectionChanged', self.handle_card_select)
+        self.cls_aggrid_polars = AgGridPolars(
+            df=self.df,
+            checkbox_field='name',
+            grid_height=self.pageconf.get("sidebar_cards_grid_height"),
+            on_selection_change=self.handle_selection_change
+        )
+        self.cls_aggrid_polars.create_grid()
 
     def main(self):
         """Initialize main content area with cards grid"""
-        self.ui_card_container = CardContainer(
+        self.cls_card_container = CardContainer(
             columns=self.pageconf.get("cards_per_row"),
             card_type=CardType.CHART,
             card_height=self.pageconf.get("card_height"),
@@ -68,37 +51,19 @@ class CardsModulPage(PageTemplate):
     async def handle_search(self, event):
         """Filter grid data based on name field"""
         search_text = event.value if event.value is not None else ''
-
-        if search_text:
-            await self.ui_cards_aggrid.run_grid_method('setFilterModel', {
-                'name': {
-                    'type': 'contains',
-                    'filter': search_text
-                }
-            })
-        else:
-            # Clear filters when search is empty
-            await self.ui_cards_aggrid.run_grid_method('setFilterModel', None)
+        await self.cls_aggrid_polars.search(search_text)
 
     async def handle_card_remove(self, card_name: str):
         """Handle card removal triggered by X button click"""
-        if card_name in self.selected_card_names:
-            await self.ui_cards_aggrid.run_row_method(card_name, 'setSelected', False)
+        await self.cls_aggrid_polars.deselect_row(card_name)
 
-    async def handle_card_select(self, _):
-        """Update displayed cards based on grid selection"""
-        selected_rows = await self.ui_cards_aggrid.get_selected_rows()
-        newly_selected_names = {row['name'] for row in selected_rows}
-
-        # Remove cards that were deselected
-        cards_to_remove = self.selected_card_names - newly_selected_names
-        for card_name in cards_to_remove:
-            self.ui_card_container.remove_card(card_name)
+    async def handle_selection_change(self, removed: Set[str], added: Set[str]):
+        """Update displayed cards based on grid selection changes"""
+        # Remove deselected cards
+        for card_name in removed:
+            self.cls_card_container.remove_card(card_name)
 
         # Add newly selected cards
-        cards_to_add = newly_selected_names - self.selected_card_names
-        for card_name in cards_to_add:
+        for card_name in added:
             card_dict = self.df.filter(pl.col('name') == card_name).to_dicts()[0]
-            self.ui_card_container.add_card(card_name, card_dict)
-
-        self.selected_card_names = newly_selected_names
+            self.cls_card_container.add_card(card_name, card_dict)

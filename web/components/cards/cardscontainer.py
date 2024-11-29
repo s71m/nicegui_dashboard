@@ -1,4 +1,4 @@
-from typing import Optional, Callable, Union
+from typing import Optional, Callable, Union, Awaitable
 from nicegui import ui
 
 from web.components.cards.cardtemplate import CardTemplate
@@ -12,7 +12,7 @@ class CardContainer(ui.grid):
     def __init__(self, columns: int = 3,
                  card_type: Union[CardType, dict] = CardType.COMMON,
                  card_height: int = 300,
-                 on_remove: Optional[Callable[[str], None]] = None):
+                 on_remove: Optional[Callable[[str], Awaitable[None]]] = None):
         super().__init__(columns=columns)
         self.ui_cards = {}
         self.card_type = card_type
@@ -30,7 +30,7 @@ class CardContainer(ui.grid):
         </style>
         ''')
 
-    def add_card(self, card_name: str, card_dict: dict) -> None:
+    def add_card(self, card_name: str, card_dict: dict, **kwargs) -> None:
         if card_name not in self.ui_cards:
             with self:
                 card_class = self.card_type.value
@@ -38,7 +38,8 @@ class CardContainer(ui.grid):
                     card_name,
                     card_dict,
                     self,
-                    self.on_remove
+                    self.on_remove,
+                    **kwargs
                 )
 
     def remove_card(self, card_name: str) -> None:

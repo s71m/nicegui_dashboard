@@ -4,6 +4,7 @@ import importlib
 from pathlib import Path
 from loguru import logger
 
+
 class ModuleReloader:
     def __init__(self):
         """
@@ -48,7 +49,7 @@ class ModuleReloader:
 
 
     def reload_project_modules(self):
-        """Module reloader that skips __main__ and __mp_main__"""
+        """Simple module reloader that skips __main__ and __mp_main__"""
 
         self.modules_to_reload = sorted(set(module['name'] for module in self.get_project_modules()))
         modules_reloaded = []

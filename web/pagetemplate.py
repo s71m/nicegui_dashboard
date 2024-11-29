@@ -1,12 +1,16 @@
+import urllib
 from abc import abstractmethod, ABC
 from typing import Optional
+
 from nicegui import ui
 from nicegui.events import KeyEventArguments
-from loguru import logger
+from fastapi import Request
 
 from web.components.pageconf import globalpageconf
 from web.components.pageinfo import PageInfo
 from web.header import create_menu, reload_modules
+
+from loguru import logger
 
 
 async def on_save():
@@ -17,14 +21,21 @@ async def on_save():
 class PageTemplate(ABC):
     """Abstract base class for pages"""
 
-    def __init__(self, pageinfo: PageInfo):
-        self.pageinfo = pageinfo
-        self.left_drawer: Optional[ui.left_drawer] = None
-        self.keyboard: Optional[ui.keyboard] = None
+    def __init__(self, **kwargs):
+        self.pageinfo: PageInfo = kwargs.get('pageinfo')  # Type hint for PageInfo
+        self.request: Request = kwargs.get('request')    # Type hint for Request
+        self.query_params = dict(self.request.query_params)
+
+        # logger.debug(self.request.url) full url
+        # logger.debug(self.request.url.path) route
+
+        self.pageconf = globalpageconf.load(self.pageinfo.route)
+
+        self.ui_left_drawer: Optional[ui.left_drawer] = None
+        self.ui_keyboard: Optional[ui.keyboard] = None
 
         self.has_sidebar = self.check_sidebar()
 
-        self.pageconf = globalpageconf.load(self.pageinfo.route)
         # Template method that defines the overall page structure
         self.render()
 
@@ -53,11 +64,11 @@ class PageTemplate(ABC):
         """Setup global keyboard shortcuts"""
         def handle_key(e: KeyEventArguments):
             # Handle Ctrl+Q to toggle sidebar
-            if (e.modifiers.ctrl and e.key == 'q' and e.action.keydown and not e.action.repeat and self.left_drawer):
-                self.left_drawer.toggle()
+            if (e.modifiers.ctrl and e.key == 'q' and e.action.keydown and not e.action.repeat and self.ui_left_drawer):
+                self.ui_left_drawer.toggle()
 
-        self.keyboard = ui.keyboard(on_key=handle_key)
-        self.keyboard.active = True
+        self.ui_keyboard = ui.keyboard(on_key=handle_key)
+        self.ui_keyboard.active = True
 
     def check_sidebar(self) -> bool:
         """Check if sidebar is implemented by checking MRO"""
@@ -73,7 +84,7 @@ class PageTemplate(ABC):
             with ui.row().classes('items-center'):
                 ui.label(self.pageinfo.route).classes('text-white text-xl font-bold').style('width: 350px;')
                 if self.has_sidebar:
-                    ui.button(icon='menu', on_click=lambda: self.left_drawer.toggle()) \
+                    ui.button(icon='menu', on_click=lambda: self.ui_left_drawer.toggle()) \
                         .props('flat color=white')
 
                 ui.button(icon='settings',
@@ -92,7 +103,7 @@ class PageTemplate(ABC):
     def _create_sidebar(self) -> None:
         """Creates the sidebar structure with proper container"""
         width = self.pageconf.get('sidebar_width')  # or any value you want
-        with ui.left_drawer().props(f'width={width}') as self.left_drawer:
+        with ui.left_drawer().props(f'width={width}') as self.ui_left_drawer:
             self.sidebar()
 
     def sidebar(self) -> None:

@@ -22,3 +22,7 @@ class ProjectModulesPage(PageTemplate):
             rows=sorted(project_modules, key=lambda x: x['name']),
             row_key='name'
         ).classes('w-full')
+
+    def events(self) -> None:
+        """Define event logic (if needed)."""
+        pass

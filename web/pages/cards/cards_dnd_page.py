@@ -6,7 +6,8 @@ import polars as pl
 from nicegui import ui
 
 from web.components.pageinfo import PageInfo
-from web.components.ui_aggrid import map_polars_aggrid_schema
+from web.pages.cards.cards_polars_page import map_polars_aggrid_schema
+
 from web.pagetemplate import PageTemplate
 
 # Global variables to track drag and drop state
@@ -223,7 +224,7 @@ class CardContainer(ui.grid):
 
 
 class CardsDndPage(PageTemplate):
-    def __init__(self, pageinfo: PageInfo):
+    def __init__(self, **kwargs):
         # Initialize data
         self.df = pl.DataFrame({
             'name': pl.Series(['Card ' + str(i) for i in range(1, 15)], dtype=pl.String),
@@ -242,7 +243,7 @@ class CardsDndPage(PageTemplate):
         self.ui_cards_aggrid: Optional[ui.aggrid] = None
         self.ui_card_container: Optional[CardContainer] = None
 
-        super().__init__(pageinfo)
+        super().__init__(**kwargs)
 
     def sidebar(self):
         """Create sidebar with search and data grid"""

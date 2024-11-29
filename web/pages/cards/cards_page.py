@@ -5,7 +5,7 @@ from web.pagetemplate import PageTemplate
 
 
 class CardsPage(PageTemplate):
-    def __init__(self, pageinfo: PageInfo):
+    def __init__(self, **kwargs):
         # Sample data for display
         self.card_data_list = [
             {'name': f'Card {i}', 'description': f'Description {i}'}
@@ -21,7 +21,7 @@ class CardsPage(PageTemplate):
         self.data_grid: Optional[ui.aggrid] = None
         self.cards_display_grid: Optional[ui.grid] = None
 
-        super().__init__(pageinfo)
+        super().__init__(**kwargs)
 
     def sidebar(self):
         """Create sidebar with search and data grid"""
@@ -129,7 +129,7 @@ class CardsPage(PageTemplate):
 
     def _remove_card(self, card_name: str):
         """
-        Remove a card from display and update grid selection
+        Remove a card from display and optionally update grid selection
 
         Args:
             card_name: Name of the card to remove

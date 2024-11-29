@@ -2,12 +2,14 @@ from typing import Callable, Optional
 from nicegui import ui
 
 class CardTemplate(ui.card):
-    def __init__(self, name: str, card_dict: dict, cls_card_container, on_close: Callable = None) -> None:
+    def __init__(self, name: str, card_dict: dict, cls_card_container, on_close: Callable = None, **kwargs) -> None:
         super().__init__()
         self.name = name
         self.card_dict = card_dict
         self.cls_card_container = cls_card_container
         self.on_close = on_close
+        self.kwargs = kwargs
+
         self.ui_info_label = None
         self.overlay = None
         self.zones = {}  # Dictionary to store zones

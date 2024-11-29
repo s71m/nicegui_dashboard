@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 from typing import Dict
+from loguru import logger
 
 from utils.common.registry import Registry
 from web.components.pageinfo import PageInfo
@@ -74,8 +75,10 @@ class PageManager:
         """Retrieve pages from the Registry, initializing them if necessary."""
         pages = Registry.get_pages()
         if not pages:  # Check if pages is empty
+            # logger.debug("Scan pages")
             Registry.set_pages(self._scan_pages())
             pages = Registry.get_pages()
+
         return pages
 
 pagemanager = PageManager()
