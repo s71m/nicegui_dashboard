@@ -1,15 +1,10 @@
-
 from nicegui import ui, app
 from fastapi import Request
 import importlib
-
-from web_panel.app import PageInfo
-
-from web.components.pagemanager import pagemanager
-
-
 from loguru import logger
 
+from web.components.pageinfo import PageInfo
+from web.components.pagemanager import pagemanager
 from web.header import create_menu
 
 
