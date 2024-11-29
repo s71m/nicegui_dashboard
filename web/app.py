@@ -54,7 +54,7 @@ def any_page(route):
         ui.label(f"Page not found: {route}").classes('text-red-500')
 
 try:
-    ui.run(dark=True, reload=False, port=8050)
+    ui.run(dark=True, reload=False)
 except KeyboardInterrupt:
     app.storage.clear()
     app.shutdown()
