@@ -40,7 +40,7 @@ class PageManager:
             }
         """
         pages = {}
-        priority_folders = ['binance', 'tinkoff']
+        priority_folders = ['cards']
 
         for root, dirs, files in os.walk(self.pages_dir):
             relative_path = Path(root).relative_to(self.pages_dir)
