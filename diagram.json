@@ -1,0 +1,429 @@
+{
+  "nodes": [
+    {
+      "id": "1",
+      "type": "default",
+      "dimensions": {
+        "width": 150,
+        "height": 50
+      },
+      "computedPosition": {
+        "x": 100,
+        "y": 50,
+        "z": 0
+      },
+      "handleBounds": {
+        "source": [
+          {
+            "id": null,
+            "position": "bottom",
+            "nodeId": "1",
+            "type": "source",
+            "x": 72,
+            "y": 46,
+            "width": 6,
+            "height": 6
+          }
+        ],
+        "target": [
+          {
+            "id": null,
+            "position": "top",
+            "nodeId": "1",
+            "type": "target",
+            "x": 72,
+            "y": -2,
+            "width": 6,
+            "height": 6
+          }
+        ]
+      },
+      "selected": false,
+      "dragging": false,
+      "resizing": false,
+      "initialized": false,
+      "isParent": false,
+      "position": {
+        "x": 100,
+        "y": 50
+      },
+      "data": {
+        "label": "Default Node 1"
+      },
+      "events": {},
+      "style": {
+        "backgroundColor": "lightgray",
+        "width": "150px",
+        "height": "50px"
+      }
+    },
+    {
+      "id": "2",
+      "type": "simple",
+      "dimensions": {
+        "width": 204,
+        "height": 60
+      },
+      "computedPosition": {
+        "x": 100,
+        "y": 200,
+        "z": 0
+      },
+      "handleBounds": {
+        "source": [
+          {
+            "id": null,
+            "position": "bottom",
+            "nodeId": "2",
+            "type": "source",
+            "x": 99,
+            "y": 56,
+            "width": 6,
+            "height": 6
+          }
+        ],
+        "target": [
+          {
+            "id": null,
+            "position": "top",
+            "nodeId": "2",
+            "type": "target",
+            "x": 99,
+            "y": -2,
+            "width": 6,
+            "height": 6
+          }
+        ]
+      },
+      "selected": false,
+      "dragging": false,
+      "resizing": false,
+      "initialized": false,
+      "isParent": false,
+      "position": {
+        "x": 100,
+        "y": 200
+      },
+      "data": {
+        "label": "Simple Node"
+      },
+      "events": {},
+      "style": {
+        "width": "204px",
+        "height": "60px"
+      }
+    },
+    {
+      "id": "3",
+      "type": "detail",
+      "dimensions": {
+        "width": 247,
+        "height": 137
+      },
+      "computedPosition": {
+        "x": 100,
+        "y": 350,
+        "z": 0
+      },
+      "handleBounds": {
+        "source": [
+          {
+            "id": null,
+            "position": "bottom",
+            "nodeId": "3",
+            "type": "source",
+            "x": 120.5,
+            "y": 133.1875,
+            "width": 6,
+            "height": 6
+          }
+        ],
+        "target": [
+          {
+            "id": null,
+            "position": "top",
+            "nodeId": "3",
+            "type": "target",
+            "x": 120.5,
+            "y": -2,
+            "width": 6,
+            "height": 6
+          }
+        ]
+      },
+      "selected": false,
+      "dragging": false,
+      "resizing": false,
+      "initialized": false,
+      "isParent": false,
+      "position": {
+        "x": 100,
+        "y": 350
+      },
+      "data": {
+        "title": "Detail Node",
+        "description": "This is a detailed node with title and description"
+      },
+      "events": {}
+    }
+  ],
+  "edges": [
+    {
+      "id": "vueflow__edge-1-2",
+      "type": "default",
+      "source": "1",
+      "target": "2",
+      "sourceHandle": null,
+      "targetHandle": null,
+      "data": {},
+      "events": {},
+      "label": "",
+      "sourceNode": {
+        "id": "1",
+        "type": "default",
+        "dimensions": {
+          "width": 150,
+          "height": 50
+        },
+        "computedPosition": {
+          "x": 100,
+          "y": 50,
+          "z": 0
+        },
+        "handleBounds": {
+          "source": [
+            {
+              "id": null,
+              "position": "bottom",
+              "nodeId": "1",
+              "type": "source",
+              "x": 72,
+              "y": 46,
+              "width": 6,
+              "height": 6
+            }
+          ],
+          "target": [
+            {
+              "id": null,
+              "position": "top",
+              "nodeId": "1",
+              "type": "target",
+              "x": 72,
+              "y": -2,
+              "width": 6,
+              "height": 6
+            }
+          ]
+        },
+        "selected": false,
+        "dragging": false,
+        "resizing": false,
+        "initialized": false,
+        "isParent": false,
+        "position": {
+          "x": 100,
+          "y": 50
+        },
+        "data": {
+          "label": "Default Node 1"
+        },
+        "events": {},
+        "style": {
+          "backgroundColor": "lightgray",
+          "width": "150px",
+          "height": "50px"
+        }
+      },
+      "targetNode": {
+        "id": "2",
+        "type": "simple",
+        "dimensions": {
+          "width": 204,
+          "height": 60
+        },
+        "computedPosition": {
+          "x": 100,
+          "y": 200,
+          "z": 0
+        },
+        "handleBounds": {
+          "source": [
+            {
+              "id": null,
+              "position": "bottom",
+              "nodeId": "2",
+              "type": "source",
+              "x": 99,
+              "y": 56,
+              "width": 6,
+              "height": 6
+            }
+          ],
+          "target": [
+            {
+              "id": null,
+              "position": "top",
+              "nodeId": "2",
+              "type": "target",
+              "x": 99,
+              "y": -2,
+              "width": 6,
+              "height": 6
+            }
+          ]
+        },
+        "selected": false,
+        "dragging": false,
+        "resizing": false,
+        "initialized": false,
+        "isParent": false,
+        "position": {
+          "x": 100,
+          "y": 200
+        },
+        "data": {
+          "label": "Simple Node"
+        },
+        "events": {},
+        "style": {
+          "width": "204px",
+          "height": "60px"
+        }
+      },
+      "sourceX": 175,
+      "sourceY": 102,
+      "targetX": 202,
+      "targetY": 198
+    },
+    {
+      "id": "vueflow__edge-2-3",
+      "type": "default",
+      "source": "2",
+      "target": "3",
+      "sourceHandle": null,
+      "targetHandle": null,
+      "data": {},
+      "events": {},
+      "label": "",
+      "sourceNode": {
+        "id": "2",
+        "type": "simple",
+        "dimensions": {
+          "width": 204,
+          "height": 60
+        },
+        "computedPosition": {
+          "x": 100,
+          "y": 200,
+          "z": 0
+        },
+        "handleBounds": {
+          "source": [
+            {
+              "id": null,
+              "position": "bottom",
+              "nodeId": "2",
+              "type": "source",
+              "x": 99,
+              "y": 56,
+              "width": 6,
+              "height": 6
+            }
+          ],
+          "target": [
+            {
+              "id": null,
+              "position": "top",
+              "nodeId": "2",
+              "type": "target",
+              "x": 99,
+              "y": -2,
+              "width": 6,
+              "height": 6
+            }
+          ]
+        },
+        "selected": false,
+        "dragging": false,
+        "resizing": false,
+        "initialized": false,
+        "isParent": false,
+        "position": {
+          "x": 100,
+          "y": 200
+        },
+        "data": {
+          "label": "Simple Node"
+        },
+        "events": {},
+        "style": {
+          "width": "204px",
+          "height": "60px"
+        }
+      },
+      "targetNode": {
+        "id": "3",
+        "type": "detail",
+        "dimensions": {
+          "width": 247,
+          "height": 137
+        },
+        "computedPosition": {
+          "x": 100,
+          "y": 350,
+          "z": 0
+        },
+        "handleBounds": {
+          "source": [
+            {
+              "id": null,
+              "position": "bottom",
+              "nodeId": "3",
+              "type": "source",
+              "x": 120.5,
+              "y": 133.1875,
+              "width": 6,
+              "height": 6
+            }
+          ],
+          "target": [
+            {
+              "id": null,
+              "position": "top",
+              "nodeId": "3",
+              "type": "target",
+              "x": 120.5,
+              "y": -2,
+              "width": 6,
+              "height": 6
+            }
+          ]
+        },
+        "selected": false,
+        "dragging": false,
+        "resizing": false,
+        "initialized": false,
+        "isParent": false,
+        "position": {
+          "x": 100,
+          "y": 350
+        },
+        "data": {
+          "title": "Detail Node",
+          "description": "This is a detailed node with title and description"
+        },
+        "events": {}
+      },
+      "sourceX": 202,
+      "sourceY": 262,
+      "targetX": 223.5,
+      "targetY": 348
+    }
+  ],
+  "viewport": {
+    "x": 0,
+    "y": 0,
+    "zoom": 1
+  }
+}

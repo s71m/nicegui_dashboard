@@ -1,0 +1,164 @@
+/* Base styles for both simple and detail nodes */
+.simple-node {
+  height: 100%;
+  width: 100%;
+  background: rgba(139, 69, 19, 0.2);
+  border-radius: 8px;
+  border: 1px solid #444;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  position: relative;
+  color: #eee;
+  font-family: 'JetBrains Mono', sans-serif;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.detail-node {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(145deg, #2e2e2e, #373737);
+  border-radius: 8px;
+  border: 1px solid #444;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  position: relative;
+  color: #eee;
+  font-family: 'JetBrains Mono', sans-serif;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Node content container */
+.node-content {
+  height: 100%;
+  padding: 8px;  /* Reduced padding from 12px to 8px */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Node header: typically a title or label */
+.node-header {
+  flex-shrink: 0;
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  font-size: 16px;
+  font-weight: bold;
+  font-family: 'JetBrains Mono', sans-serif;
+}
+
+/* Node body: description or other details */
+.node-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  line-height: 1.4;
+  min-height: 0; /* Important for flex child */
+}
+
+/* Input field styles with focus transitions */
+.node-input {
+  width: 100%;
+  /* Border removed as requested */
+  background: #3a3a3a;
+  color: #eee;
+  padding: 6px 8px;
+  margin: 4px 0;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.node-input:focus {
+  outline: none;
+  background: #4a4a4a;
+}
+
+/* Specific styles for title inputs */
+.node-title-input {
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  padding: 0;
+  margin: 0;
+  height: auto;
+  background: transparent;
+}
+
+/* Specific styles for description inputs */
+.node-description-input {
+  flex: 1;
+  font-size: 14px;
+  color: #ccc;
+  resize: none; /* Changed from vertical to none */
+  min-height: 50px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+/* Adjusting detail node dimensions */
+.detail-node {
+  min-width: 220px;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Rest of the styles remain the same... */
+.node-handle {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  margin: -15px 0 0 -15px;
+  background: transparent;
+  border: none;
+  cursor: nwse-resize;
+}
+
+.node-handle:hover {
+  background-color: rgba(102, 175, 233, 0.2);
+  border: 2px solid #66afe9;
+}
+
+.vue-flow__resize-control.handle {
+  width: 12px;
+  height: 12px;
+  border: 2px solid #fff;
+  border-radius: 2px;
+  background-color: #3367d9;
+}
+
+.vue-flow__resize-control.handle::before {
+  content: "";
+  position: absolute;
+  top: -15px;
+  left: -15px;
+  width: 42px;
+  height: 42px;
+  background: transparent;
+}
+
+.vue-flow__resize-control.handle.left {
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.vue-flow__resize-control.handle.right {
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.vue-flow__resize-control.handle.top {
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+}
+.vue-flow__resize-control.handle.bottom {
+  left: 50%;
+  top: 100%;
+  transform: translateX(-50%);
+}
+.vue-flow__resize-control.handle.top.left,
+.vue-flow__resize-control.handle.bottom.left {
+  left: 0;
+}
+.vue-flow__resize-control.handle.top.right,
+.vue-flow__resize-control.handle.bottom.right {
+  left: 100%;
+}
