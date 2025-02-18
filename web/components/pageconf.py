@@ -15,6 +15,11 @@ PAGECONF_DEFAULT = {
     "sidebar_cards_grid_height": 500,
     "cards_per_row": 3,
     "card_height": 450,
+    "date_filter": {
+        "enabled": True,
+        "default_end": "2024-10-10",
+        "days_before": 10
+    }
 }
 
 

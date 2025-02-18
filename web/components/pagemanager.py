@@ -3,8 +3,8 @@ from pathlib import Path
 from typing import Dict
 from loguru import logger
 
-from utils.common.registry import Registry
 from web.components.pageinfo import PageInfo
+from web.components.registry import Registry
 
 CURRENT_DIR = Path(__file__).parent.parent
 PAGES = "pages"
@@ -13,7 +13,7 @@ PAGES = "pages"
 class PageManager:
     def __init__(self):
         self.pages_dir = CURRENT_DIR / PAGES
-        # Registry.clear()  # Clear registry on init
+        Registry.clear()  # Clear registry on init
 
     def _create_page_info(self, route: str, modulepath: str) -> PageInfo:
         """Create PageInfo instance"""
@@ -40,7 +40,7 @@ class PageManager:
             }
         """
         pages = {}
-        priority_folders = ['cards']
+        priority_folders = ['cards', 'diagram']
 
         for root, dirs, files in os.walk(self.pages_dir):
             relative_path = Path(root).relative_to(self.pages_dir)
@@ -60,7 +60,7 @@ class PageManager:
                     route = f"/{relative_path}/{base_name}"
 
                 pages[route] = self._create_page_info(route, modulepath)
-
+        # logger.debug(pages)
         # Sort pages
         return dict(
             sorted(pages.items(), key=lambda x: (

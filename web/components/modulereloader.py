@@ -47,14 +47,26 @@ class ModuleReloader:
 
         return project_modules
 
-
     def reload_project_modules(self):
         """Simple module reloader that skips __main__ and __mp_main__"""
 
-        self.modules_to_reload = sorted(set(module['name'] for module in self.get_project_modules()))
-        modules_reloaded = []
-        for module in self.modules_to_reload:
+        # Get modules and control reload order
+        self.modules_to_reload = list(module['name'] for module in self.get_project_modules())
 
+        # Remove modules we don't want to reload
+        if 'web.components.modulereloader' in self.modules_to_reload:
+            self.modules_to_reload.remove('web.components.modulereloader')
+
+        self.modules_to_reload = [module for module in self.modules_to_reload if not module.startswith('utils.')]
+
+        # Put webapp last
+        if 'web.webapp' in self.modules_to_reload:
+            self.modules_to_reload.remove('web.webapp')
+            self.modules_to_reload.append('web.webapp')
+
+        modules_reloaded = []
+
+        for module in self.modules_to_reload:
             if module in ('__main__', '__mp_main__'):
                 continue
 
