@@ -6,7 +6,6 @@ vueflow_component/
 ├── src/
 │   └── index.js    # Main source file
 ├── dist/           # Output directory
-├── package.json    # Dependencies
 └── webpack.config.js
 ```
 
