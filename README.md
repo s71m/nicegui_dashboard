@@ -69,6 +69,11 @@ The purpose of this repository is to provide a friendly starting point for devel
 
 https://github.com/user-attachments/assets/cadec471-1204-446f-bb4e-2ad72adeebfd
 
+## VueFlow for NiceGUI
+
+https://github.com/user-attachments/assets/11dba36d-17fe-47e8-82b2-8f94fa83de84
+
+
 
 
 
