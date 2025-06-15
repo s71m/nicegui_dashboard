@@ -1,11 +1,13 @@
 from nicegui import ui, app
 from fastapi import Request
 import importlib
-from components.pageinfo import PageInfo
-from components.pagemanager import pagemanager
 
-from header import create_menu, reload_modules
 from loguru import logger
+
+from web.components.pageinfo import PageInfo
+from web.components.pagemanager import pagemanager
+from web.header import create_menu, reload_modules
+
 
 def webapp():
     app.add_static_files('/static', 'web/static')

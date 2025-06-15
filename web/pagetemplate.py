@@ -7,9 +7,9 @@ from nicegui import ui
 from nicegui.events import KeyEventArguments
 from fastapi import Request
 
-from components.pageconf import globalpageconf
-from components.pageinfo import PageInfo
-from header import create_menu, reload_modules
+from web.components.pageconf import globalpageconf
+from web.components.pageinfo import PageInfo
+from web.header import create_menu, reload_modules
 
 from loguru import logger
 

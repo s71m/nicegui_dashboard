@@ -16,14 +16,18 @@ The purpose of this repository is to provide a friendly starting point for devel
   ### **How to Start**
 
 1.  Install the required dependencies using:
-    `pip install -r requirements.txt` 
+   ```bash
+   pip install -r requirements.txt
+   ```
     
 2.  Launch the application:
-    `python web/app.py` 
+   ```bash
+   cd nicegui_dashboard
+   python -m web.app
+   ```
     
 3.  Open your browser and navigate to:
     `http://localhost:8080`
-
 
 
 ### Explanation of project structure: `nicegui_dashboard`

@@ -1,7 +1,7 @@
 from nicegui import ui
-from components.modulereloader import ModuleReloader
+from web.components.modulereloader import ModuleReloader
 
-from components.pagemanager import pagemanager
+from web.components.pagemanager import pagemanager
 
 
 reloader = ModuleReloader()

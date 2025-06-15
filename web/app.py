@@ -1,7 +1,7 @@
 import sys
 from nicegui import ui
-from webapp import webapp, webapp_shutdown
 
+from web.webapp import webapp, webapp_shutdown
 
 return_code = 1
 try:

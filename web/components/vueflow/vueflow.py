@@ -29,49 +29,6 @@ class VueFlow(Element, component='vueflow.vue'):
                 'node_data': e.args.get('data')
             }))
 
-        self.on('nodes_updated', self._handle_nodes_update)
-        self.on('save_to_file', self._handle_save_to_file)
-        self.on('load_from_file', self._handle_load_from_file)
-
-    def _handle_nodes_update(self, event):
-        """Store the updated nodes."""
-        self._nodes = event.args
-
-    async def _handle_save_to_file(self, event):
-        """Handle saving diagram to file."""
-        try:
-            nodes = await self.get_nodes()
-            edges = await self.get_edges()
-            viewport = await self.get_viewport()
-
-            flow_data = {
-                'nodes': nodes,
-                'edges': edges,
-                'viewport': viewport
-            }
-
-            with open('diagram.json', 'w') as f:
-                json.dump(flow_data, f, indent=2)
-
-            ui.notify('Diagram saved successfully')
-        except Exception as e:
-            ui.notify(f'Error saving diagram: {str(e)}', type='error')
-
-    async def _handle_load_from_file(self, event):
-        """Handle loading diagram from file."""
-        try:
-            if not Path('diagram.json').exists():
-                ui.notify('No saved diagram found', type='warning')
-                return
-
-            with open('diagram.json', 'r') as f:
-                flow_data = json.load(f)
-
-            await self.restore_diagram(flow_data)
-            ui.notify('Diagram loaded successfully')
-        except Exception as e:
-            ui.notify(f'Error loading diagram: {str(e)}', type='error')
-
     async def get_nodes(self) -> List[Dict]:
         """Return current nodes."""
         return await self.run_method('getNodes')
